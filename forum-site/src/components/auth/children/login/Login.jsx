@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import './Login.scss'
-import axios from '../../axios/index'
+import axios from '../../../../axios'
 
 const Login = () => {
 
@@ -26,6 +27,7 @@ const Login = () => {
         <div className='login-wrap'>
             <input type="text" placeholder="Email" value={email} onInput={(e)=>{setEmail(e.target.value.trim())}}/>
             <input type="password" placeholder="Password" value={password} onInput={(e)=>{setPassword(e.target.value)}}/>
+            <span>Don't have an account? <Link to="/auth/register">Register</Link></span>
             <button className="button-8" onClick={login}>Login</button>
         </div>
     );
