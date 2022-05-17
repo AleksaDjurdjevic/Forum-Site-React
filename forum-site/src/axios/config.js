@@ -1,6 +1,5 @@
 import axios from 'axios'
-import { useSelector } from 'react-redux'
-
+import store from '@/store/store.js'
 
 const instance = axios.create({
     baseURL: 'http://321x567.mars-t2.mars-hosting.com',
@@ -8,7 +7,8 @@ const instance = axios.create({
 
 function handleRequestInterceptor(config) {
     try {
-        const sid = useSelector(state => state.authenticated.sid) ? useSelector(state => state.authenticated.sid) : localStorage.getItem('sid')
+        const state = store.getState();
+        const sid = state.authenticated.sid ? state.authenticated.sid : localStorage.getItem('sid');
         if (config.params) {
             config.params.sid = sid;
         } else {

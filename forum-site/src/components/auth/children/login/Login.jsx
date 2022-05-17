@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, Navigate } from 'react-router-dom'
 import './Login.scss'
 import axios from '@/axios'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { setIsAuth } from '@/store/isAuth'
 
 
 const Login = () => {
-
     //state
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const isAuth = useSelector(state => state.authenticated.isAuth);
     const dispatch = useDispatch()
     const navigateTo = useNavigate()
 
@@ -31,12 +31,15 @@ const Login = () => {
 
     //html template
     return (
+        isAuth? 
         <div className='login-wrap'>
             <input type="text" placeholder="Email" value={email} onInput={(e) => { setEmail(e.target.value.trim()) }} />
             <input type="password" placeholder="Password" value={password} onInput={(e) => { setPassword(e.target.value) }} />
             <span>Don't have an account? <Link to="/auth/register">Register</Link></span>
             <button className="button-8" onClick={login}>Login</button>
         </div>
+        :
+        <Navigate to="/" replace />
     );
 }
 

@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import axios from '@/axios'
 
 export const authenticated = createSlice({
     name: 'authenticated',
@@ -13,22 +12,15 @@ export const authenticated = createSlice({
             state.isAuth = action.payload.isAuth
             localStorage.setItem('sid', state.sid)
         },
-        setIsLoggedOut(state,action) {
+        setIsLoggedOut(state, action) {
             state.sid = ''
             state.isAuth = false
             localStorage.removeItem('sid')
-        },
-        checkSession() {
-            try {
-                const res = axios.checkSession()
-            } catch (error) {
-                console.log(error)      
-            }
         }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { setIsAuth, setIsLoggedOut, checkSession } = authenticated.actions
+export const { setIsAuth, setIsLoggedOut } = authenticated.actions
 
 export default authenticated.reducer

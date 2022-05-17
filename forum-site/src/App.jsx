@@ -6,8 +6,10 @@ import Login from './components/auth/children/login/Login.jsx'
 import Register from './components/auth/children/register/Register.jsx'
 import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
-import { setIsLoggedOut, checkSession } from './store/isAuth'
+import { setIsLoggedOut } from './store/isAuth'
 import { useEffect } from 'react'
+import { setIsAuth } from '@/store/isAuth';
+import axios from '@/axios'
 
 const App = () => {
   const navigateTo = useNavigate()
@@ -19,15 +21,22 @@ const App = () => {
     navigateTo('/auth/login')
   }
 
-  const invokeCheckSession = async () => {
-    await dispatch(checkSession())
+  const checkSession = async () => {
+    try {
+      const res = await axios.checkSession();
+      dispatch(setIsAuth({ sid: res.data.sid, isAuth: true }))
+    } catch (error) {
+      console.warn(error);
+      navigateTo('/auth/login')      
+    } 
   }
+
   //mounted
   useEffect(() => {
+    checkSession();
     setInterval(() => {
-      invokeCheckSession()
-      navigateTo('/auth/login')
-    }, 1000);
+      checkSession();
+    }, .2 * 60 * 1000);
   }, []);
 
   return (
@@ -40,7 +49,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Blogs />}></Route>
           <Route path="/auth" element={<Auth />}>
-            <Route path="/auth/login" element={<Login />}></Route>
+            <Route path="/auth/login" element={<Login isAuth={isAuth}/>}></Route>
             <Route path="/auth/register" element={<Register />}></Route>
           </Route>
         </Routes>
